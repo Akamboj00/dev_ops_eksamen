@@ -20,10 +20,7 @@ jobs:
         run: |
         ./gradlew assemble
 
-      - name: 'Get Version Number'
-        run: |
-          echo "::set-env name=VERSION::$(./gradlew properties -q | grep "version:" | awk '{print $2}')"
-          
+
       - name: 'Publish JAR'
         uses: actions/upload-artifact@v2-preview
         with:
