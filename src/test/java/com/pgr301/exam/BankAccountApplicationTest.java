@@ -21,6 +21,6 @@ class BankAccountApplicationTest {
         void checkAccountCurrency(){
             Account account = new Account();
             account.setCurrency("NOK");
-            assertEquals("NOK", account.getCurrency());
+            assertEquals("USD", account.getCurrency());
         }
 }
