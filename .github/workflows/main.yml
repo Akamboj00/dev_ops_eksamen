@@ -15,10 +15,14 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - run: ./gradlew build
-      - uses: actions/upload-artifact@v2
+      - name: 'Assemble JAR'
+        run: |
+          ./gradlew assemble
+      - name: 'Get Version Number'
+        run: |
+          echo "::set-env name=VERSION::$(./gradlew properties -q | grep "version:" | awk '{print $2}')"
+      - name: 'Publish JAR'
+        uses: actions/upload-artifact@v2-preview
         with:
-          name: Package
-          path: build/libs
+          name: ‘cicd-demo-${{env.VERSION}}-all.jar'
+          path: build/libs/*-all.jar
