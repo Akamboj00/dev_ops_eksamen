@@ -20,7 +20,7 @@ class BankAccountApplicationTest {
         @Test
         void checkAccountCurrency(){
             Account account = new Account();
-            account.setCurrency("NOK");
+            account.setCurrency("USD");
             assertEquals("USD", account.getCurrency());
         }
 }
