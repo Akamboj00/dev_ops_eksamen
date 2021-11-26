@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class BankAccountApplicationTest {
 
-        //Simple test that creates an account with an id, and checks if the id is correct
+        //Simple test that creates an account with an id, and checks if the id is correct 
         @Test
         void checkAccountHasCorrectId(){
             Account account = new Account();
