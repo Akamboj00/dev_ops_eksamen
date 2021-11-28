@@ -3,15 +3,20 @@ package com.pgr301.exam;
 import com.pgr301.exam.model.Account;
 import com.pgr301.exam.model.Transaction;
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.testcontainers.shaded.com.google.common.base.Stopwatch;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static java.math.BigDecimal.*;
 import static java.util.Optional.ofNullable;
@@ -21,6 +26,15 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
 
     @Autowired
     private BankingCoreSystmeService bankService;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
+
+
+    @Autowired
+    public BankAccountController(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+    }
 
     @PostMapping(path = "/account/{fromAccount}/transfer/{toAccount}", consumes = "application/json", produces = "application/json")
     public void transfer(@RequestBody Transaction tx, @PathVariable String fromAccount, @PathVariable String toAccount) {
@@ -41,7 +55,9 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        meterRegistry.timer("app.timer", "type", "ping");
     }
+
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "video not found")
     public static class AccountNotFoundException extends RuntimeException {
