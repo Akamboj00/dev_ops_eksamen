@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.testcontainers.shaded.com.google.common.base.Stopwatch;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -39,11 +40,13 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
     @PostMapping(path = "/account/{fromAccount}/transfer/{toAccount}", consumes = "application/json", produces = "application/json")
     public void transfer(@RequestBody Transaction tx, @PathVariable String fromAccount, @PathVariable String toAccount) {
         bankService.transfer(tx, fromAccount, toAccount);
+        meterRegistry.timer("transfer.duration").record(Duration.ofMillis(5000));
     }
 
     @PostMapping(path = "/account", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Account> updateAccount(@RequestBody Account a) {
         bankService.updateAccount(a);
+        meterRegistry.timer("account.duration").record(Duration.ofMillis(5000));
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
@@ -57,6 +60,7 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         meterRegistry.timer("app.timer", "type", "ping");
     }
+
 
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "video not found")
