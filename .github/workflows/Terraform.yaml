@@ -2,9 +2,6 @@ name: "Terraform"
 
 on:
   push:
-    paths:
-      - 'ecrrepo.tf'
-      - 'provider.tf'
     branches:
       - main
   pull_request:
