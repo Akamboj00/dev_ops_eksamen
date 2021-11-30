@@ -9,7 +9,10 @@ on:
     branches:
       - main
   pull_request:
-
+    paths: [
+        "infra/ecrrepo.tf",
+        "infra/provider.tf"
+    ]
 jobs:
   terraform:
     name: "Terraform"
