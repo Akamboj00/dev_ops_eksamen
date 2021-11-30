@@ -21,9 +21,12 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
+
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
+        working-directory: infra
+
 
       - name: Terraform Init
         id: init
@@ -33,11 +36,14 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: infra
+
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color
+        working-directory: infra
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
