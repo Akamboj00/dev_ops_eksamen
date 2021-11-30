@@ -2,7 +2,7 @@ name: "Terraform"
 
 on:
   push:
-    paths:[
+    paths: [
       "infra/ecrrepo.tf",
       "infra/provider.tf"
     ]
