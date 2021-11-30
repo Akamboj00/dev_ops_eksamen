@@ -28,6 +28,7 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+        working-directory: infra
 
       - name: Terraform Validate
         id: validate
@@ -70,6 +71,7 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        working-directory: infra
 
   student_webapp:
     env:
