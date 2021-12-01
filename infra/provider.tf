@@ -5,6 +5,7 @@ terraform {
       version = "3.56.0"
     }
   }
+
   backend "s3" {
     bucket = "pgr301-2015-terraform"
     key    = "abka007/terraform.state"
