@@ -1,4 +1,4 @@
-name: Main
+name: Build
 
 on: [push]
 
@@ -20,3 +20,4 @@ jobs:
         with:
           name: Package
           path: staging
+

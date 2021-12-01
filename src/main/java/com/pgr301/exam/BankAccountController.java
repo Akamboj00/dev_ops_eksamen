@@ -40,7 +40,7 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
         try {
             bankService.transfer(tx, fromAccount, toAccount);
         }catch (BackEndException e){
-            meterRegistry.counter("backend-exception").increment();
+            meterRegistry.counter("backend_exception", "db", "users").increment();
         }
         timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
     }
@@ -50,7 +50,7 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
         try {
             bankService.updateAccount(a);
         }catch (BackEndException e){
-            meterRegistry.counter("Backend-exception").increment();
+            meterRegistry.counter("backend_exception").increment();
         }
         timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return new ResponseEntity<>(a, HttpStatus.OK);
@@ -62,7 +62,7 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
         try {
             account = ofNullable(bankService.getAccount(accountId)).orElseThrow(AccountNotFoundException::new);
         } catch (BackEndException e) {
-            meterRegistry.counter("Backend-exception").increment();
+            meterRegistry.counter("backend_exception").increment();
         }
         timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return new ResponseEntity<>(account, HttpStatus.OK);

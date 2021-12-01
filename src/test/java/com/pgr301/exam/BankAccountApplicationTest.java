@@ -16,11 +16,11 @@ class BankAccountApplicationTest {
             account.setId("1");
             assertEquals("1", account.getId());
         }
-
+        //Simple test that checks currency in an account
         @Test
         void checkAccountCurrency(){
             Account account = new Account();
-            account.setCurrency("USD");
+            account.setCurrency("NOK");
             assertEquals("USD", account.getCurrency());
         }
 }
