@@ -2,17 +2,14 @@ name: "Terraform"
 
 on:
   push:
-    paths: [
-      "infra/ecrrepo.tf",
-      "infra/provider.tf"
-    ]
     branches:
       - main
+    paths:
+      - infra/**
   pull_request:
-    paths: [
-        "infra/ecrrepo.tf",
-        "infra/provider.tf"
-    ]
+    paths:
+      - infra/**
+
 jobs:
   terraform:
     name: "Terraform"

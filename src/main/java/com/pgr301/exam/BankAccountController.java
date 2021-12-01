@@ -2,6 +2,7 @@ package com.pgr301.exam;
 
 import com.pgr301.exam.model.Account;
 import com.pgr301.exam.model.Transaction;
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -25,46 +26,35 @@ public class BankAccountController implements ApplicationListener<ApplicationRea
     @Autowired
     private MeterRegistry meterRegistry;
 
-    private Timer timer;
 
     @Autowired
     public BankAccountController(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        this.timer = meterRegistry.timer("app.timer", "type", "ping");
     }
 
-    long start = System.currentTimeMillis();
-
+    @Timed("transfer")
     @PostMapping(path = "/account/{fromAccount}/transfer/{toAccount}", consumes = "application/json", produces = "application/json")
     public void transfer(@RequestBody Transaction tx, @PathVariable String fromAccount, @PathVariable String toAccount) {
-        try {
-            bankService.transfer(tx, fromAccount, toAccount);
-        }catch (BackEndException e){
-            meterRegistry.counter("backend_exception", "db", "users").increment();
-        }
-        timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        meterRegistry.counter("transfer_before_code", "amount", String.valueOf(tx.getAmount())).increment();
+        bankService.transfer(tx, fromAccount, toAccount);
+        meterRegistry.counter("transfer_after_code", "amount", String.valueOf(tx.getAmount())).increment();
     }
 
+    @Timed("update")
     @PostMapping(path = "/account", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Account> updateAccount(@RequestBody Account a) {
-        try {
-            bankService.updateAccount(a);
-        }catch (BackEndException e){
-            meterRegistry.counter("backend_exception").increment();
-        }
-        timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        meterRegistry.counter("update_before_code", "id", "currency", a.getId(), a.getCurrency()).increment();
+        bankService.updateAccount(a);
+        meterRegistry.counter("update_after_code", "id", "currency", a.getId(), a.getCurrency()).increment();
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
+    @Timed("get_account")
     @GetMapping(path = "/account/{accountId}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Account> balance(@PathVariable String accountId) {
-        Account account = null;
-        try {
-            account = ofNullable(bankService.getAccount(accountId)).orElseThrow(AccountNotFoundException::new);
-        } catch (BackEndException e) {
-            meterRegistry.counter("backend_exception").increment();
-        }
-        timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        meterRegistry.counter("get_before_code", "id", accountId ).increment();
+        Account account = ofNullable(bankService.getAccount(accountId)).orElseThrow(AccountNotFoundException::new);
+        meterRegistry.counter("get_after_code", "id", accountId ).increment();
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 

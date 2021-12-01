@@ -71,17 +71,15 @@ Testing og deployment av koden foregår manuelt. Testingen skjer etter koden er 
 Her kan det være lurt å starte helt på scratch og legge om strukturen slik at den er optimal for DevOps.
 
 <h1>Oppgave Feedback</h1>
-<h5>InfluxDB:</h5>
 
-![](img/6.png)
+Når det gjelder denne oppgaven så har jeg noen mangler. I koden har jeg lagt til "Timed" metric, for å måle tiden det tar å utføre hele metoden. Og jeg har lagt til counter for backendexception. Disse counterene har jeg lagt til både før og etter registrering av metodene. Jeg har gjort det på denne måten slik at man kan kartlegge hvor i systemet det skjer svikt. Med måten jeg har lagt det opp på håpet jeg å få en indikasjon på om exception skjer hos api-teamet eller i kjernesystemet.
 
-<h5>Grafana dashbord:</h5>
+Men jeg har hatt problemer med å visualisere disse tallene, grunnet POST og GET kall i postman. Jeg tror og håper at disse metricene fortsatt vil fungere hvis api kallene er gjort riktig.
+Spørring:
 
-![](img/7.png)
+SELECT * FROM "metric" WHERE TIME > NOW() - 2h AND COUNT > 0
 
-Når det gjelder denne oppgaven så har jeg noen mangler. I koden har jeg lagt til timer på alle endepunkter. Og denne metricen får man opp i influxDB. Jeg har også lagt til counter på backend exceptions, men denne metricen får jeg ikke opp i Influx eller grafana. Jeg lar koden stå i repository i håp om å få noe uttelling på denne oppgaven, men her er jeg klar over at det er en del mangler. For å få opp timer metric i Influx:
-
-"select * from app_timer"
+Denne spørringen sjekker requests gjort de 2 siste timene.
 
 
 <h1>Oppgave Terraform</h1>
