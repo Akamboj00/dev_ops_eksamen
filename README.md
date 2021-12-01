@@ -117,12 +117,19 @@ Output:
 
 
 {
+
 "AccessKey": {
+
 "UserName": "Brukernavn",
+
 "Status": "Active",
+
 "CreateDate": "xxxx-xx-xxTxx:xx:xx.xxxZ",
+
 "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
+
 "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
+    
     }
 }
 
