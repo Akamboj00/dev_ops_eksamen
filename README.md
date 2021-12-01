@@ -130,7 +130,7 @@ Output:
 
 "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
     
-    }
+   }
 }
 
 
